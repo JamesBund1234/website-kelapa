@@ -1,5 +1,6 @@
 // Local-only preview server for Dapung Coconat.
-// Serves dist/ static assets, the product photos, and a seeded
+// Serves the project root (index.html / admin.html at the top level),
+// the dist/ assets they reference, the product photos, and a seeded
 // GET /functions/v1/app/api/catalog so the customer page renders fully
 // without the deployed backend. Not part of the published package.
 import http from 'node:http';
@@ -7,9 +8,7 @@ import { readFile } from 'node:fs/promises';
 import { extname, join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const ROOT = join(__dirname, 'dist');
-const IMG = join(__dirname, 'assets', 'images');
+const ROOT = dirname(fileURLToPath(import.meta.url));
 const PORT = 4173;
 
 const types = {
@@ -60,6 +59,11 @@ const menus = [
   m('m12', 'Serabi Kuah Kelapa', 'Serabi lembut dengan kuah santan kelapa dan gula merah.', 9000, 'cat-camilan', false, 'serabi-kuah-kelapa'),
 ];
 
+function isSafePath(rel) {
+  const segs = rel.split('/').filter(Boolean);
+  return !segs.some((s) => s.startsWith('.') || s === 'node_modules');
+}
+
 http.createServer(async (req, res) => {
   const url = new URL(req.url, 'http://127.0.0.1');
   const p = decodeURIComponent(url.pathname);
@@ -74,14 +78,9 @@ http.createServer(async (req, res) => {
       res.end('{"ok":true}');
       return;
     }
-    let filePath;
-    if (p.startsWith('/assets/images/')) {
-      const name = p.slice('/assets/images/'.length);
-      if (!name || /(^|\/)\.\.(\/|$)/.test(name)) throw new Error('bad path');
-      filePath = join(IMG, name);
-    } else {
-      filePath = join(ROOT, p === '/' ? 'index.html' : p);
-    }
+    const rel = p === '/' ? 'index.html' : p.slice(1);
+    if (!isSafePath(rel)) throw new Error('blocked path');
+    const filePath = join(ROOT, rel);
     const data = await readFile(filePath);
     res.setHeader('content-type', types[extname(filePath)] || 'application/octet-stream');
     res.end(data);
