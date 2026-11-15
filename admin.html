@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin — Dapung Coconat</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/styles.css" />
+  <link rel="stylesheet" href="/css/admin.css" />
+</head>
+<body>
+  <!-- Login -->
+  <div class="login-wrap" id="loginView" hidden>
+    <form class="login-card" id="loginForm">
+      <div class="brand" style="justify-content:center">
+        <span class="brand-mark">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 13a5 5 0 0 1-10 0"/><circle cx="12" cy="8" r="4"/><path d="M12 8V6"/></svg>
+        </span>
+        <span>
+          <span class="brand-name">Dapung <em>Coconat</em></span>
+          <span class="brand-tag">Dashboard Admin</span>
+        </span>
+      </div>
+      <h1>Masuk Admin</h1>
+      <p class="muted">Kelola menu, kategori, dan info usaha.</p>
+      <label class="field-label" for="loginPassword">Kata sandi</label>
+      <input class="input" type="password" id="loginPassword" autocomplete="current-password" required />
+      <p class="form-error" id="loginError" role="alert"></p>
+      <button class="btn btn-primary btn-block" type="submit" id="loginBtn">Masuk</button>
+      <a class="back-link" href="/">← Kembali ke situs pelanggan</a>
+    </form>
+  </div>
+
+  <!-- Dashboard -->
+  <div id="dashView" hidden>
+    <header class="admin-top">
+      <div class="container admin-top-inner">
+        <div class="brand">
+          <span class="brand-mark" style="width:38px;height:38px">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:17px;height:17px"><path d="M17 13a5 5 0 0 1-10 0"/><circle cx="12" cy="8" r="4"/><path d="M12 8V6"/></svg>
+          </span>
+          <span>
+            <span class="brand-name" style="font-size:18px">Dapung <em>Coconat</em></span>
+            <span class="brand-tag">Dashboard Admin</span>
+          </span>
+        </div>
+        <nav class="tabs" id="tabs">
+          <button class="tab active" data-tab="menu" type="button">Menu</button>
+          <button class="tab" data-tab="categories" type="button">Kategori</button>
+          <button class="tab" data-tab="settings" type="button">Pengaturan</button>
+        </nav>
+        <div class="admin-actions">
+          <a class="btn btn-ghost btn-sm" href="/" target="_blank" rel="noopener">Lihat Situs</a>
+          <button class="btn btn-ghost btn-sm" id="logoutBtn" type="button">Keluar</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="container admin-main">
+      <!-- Menu tab -->
+      <section id="tab-menu" class="tab-panel">
+        <div class="panel-head">
+          <div>
+            <h2>Menu</h2>
+            <p class="muted" id="menuCountText">Memuat…</p>
+          </div>
+          <button class="btn btn-primary" id="addMenuBtn" type="button">+ Tambah Menu</button>
+        </div>
+        <div class="menu-list" id="menuList"></div>
+      </section>
+
+      <!-- Categories tab -->
+      <section id="tab-categories" class="tab-panel" hidden>
+        <div class="panel-head">
+          <div>
+            <h2>Kategori</h2>
+            <p class="muted">Kelompokkan menu agar rapi di katalog.</p>
+          </div>
+          <button class="btn btn-primary" id="addCatBtn" type="button">+ Tambah Kategori</button>
+        </div>
+        <div class="cat-list" id="catList"></div>
+      </section>
+
+      <!-- Settings tab -->
+      <section id="tab-settings" class="tab-panel" hidden>
+        <div class="panel-head">
+          <div>
+            <h2>Info Usaha</h2>
+            <p class="muted">Data ini tampil di situs pelanggan dan tombol WhatsApp.</p>
+          </div>
+        </div>
+        <form class="settings-form" id="settingsForm">
+          <div class="form-grid">
+            <label class="field">
+              <span class="field-label">Nama usaha</span>
+              <input class="input" name="name" maxlength="80" required />
+            </label>
+            <label class="field">
+              <span class="field-label">Tagline</span>
+              <input class="input" name="tagline" maxlength="120" />
+            </label>
+          </div>
+          <label class="field">
+            <span class="field-label">Deskripsi singkat (hero)</span>
+            <textarea class="input" name="description" rows="2" maxlength="600"></textarea>
+          </label>
+          <label class="field">
+            <span class="field-label">Alamat</span>
+            <textarea class="input" name="address" rows="2" maxlength="300"></textarea>
+          </label>
+          <div class="form-grid">
+            <label class="field">
+              <span class="field-label">Nomor WhatsApp</span>
+              <input class="input" name="whatsapp" placeholder="Contoh: 6281234567890" maxlength="30" />
+            </label>
+            <label class="field">
+              <span class="field-label">Jam buka (satu baris per hari)</span>
+              <textarea class="input" name="hours" rows="3" maxlength="1000" placeholder="Senin - Jumat | 09.00 - 21.00&#10;Sabtu - Minggu | 08.00 - 22.00"></textarea>
+            </label>
+          </div>
+          <div class="form-actions">
+            <button class="btn btn-primary" type="submit" id="saveSettingsBtn">Simpan Pengaturan</button>
+          </div>
+        </form>
+      </section>
+    </main>
+  </div>
+
+  <!-- Menu modal -->
+  <div class="modal-overlay" id="menuModal" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="menuModalTitle">
+      <div class="modal-head">
+        <h3 id="menuModalTitle">Tambah Menu</h3>
+        <button class="modal-close" id="menuModalClose" type="button" aria-label="Tutup">✕</button>
+      </div>
+      <form id="menuForm">
+        <input type="hidden" name="id" id="menuId" />
+        <div class="modal-body">
+          <div class="photo-row">
+            <div class="photo-preview" id="photoPreview">
+              <img id="photoImg" alt="Pratinjau foto" hidden />
+              <span class="photo-placeholder" id="photoPlaceholder">📷 Foto menu</span>
+            </div>
+            <div class="photo-actions">
+              <label class="btn btn-ghost btn-sm" for="photoInput">Pilih Foto</label>
+              <input type="file" id="photoInput" accept="image/jpeg,image/png,image/webp" hidden />
+              <p class="muted small">JPG, PNG, atau WebP, maks 5 MB.</p>
+            </div>
+          </div>
+          <label class="field">
+            <span class="field-label">Nama menu</span>
+            <input class="input" name="name" maxlength="80" required />
+          </label>
+          <label class="field">
+            <span class="field-label">Deskripsi</span>
+            <textarea class="input" name="description" rows="2" maxlength="600"></textarea>
+          </label>
+          <div class="form-grid">
+            <label class="field">
+              <span class="field-label">Harga (Rupiah)</span>
+              <input class="input" name="price" type="number" min="0" step="1000" inputmode="numeric" required />
+            </label>
+            <label class="field">
+              <span class="field-label">Kategori</span>
+              <select class="input" name="category_id" id="categorySelect"></select>
+            </label>
+          </div>
+          <div class="form-grid">
+            <label class="field">
+              <span class="field-label">Urutan tampil</span>
+              <input class="input" name="sort_order" type="number" min="0" value="0" />
+            </label>
+            <div class="field check-row">
+              <label class="check"><input type="checkbox" name="is_best_seller" /> ⭐ Menu terlaris</label>
+              <label class="check"><input type="checkbox" name="is_available" checked /> Tampilkan di katalog</label>
+            </div>
+          </div>
+          <p class="form-error" id="menuFormError" role="alert"></p>
+        </div>
+        <div class="modal-foot">
+          <button class="btn btn-ghost" type="button" id="menuCancelBtn">Batal</button>
+          <button class="btn btn-primary" type="submit" id="menuSaveBtn">Simpan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script type="module" src="/js/admin.js"></script>
+</body>
+</html>
