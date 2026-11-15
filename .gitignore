@@ -1,0 +1,15 @@
+# Dependencies
+node_modules/
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+
+# Qoder Sites tool-owned descriptor (regenerated; contains internal refs)
+*.qoder.site
+.qoder/
+
+# OS
+.DS_Store
+Thumbs.db
